@@ -16,18 +16,27 @@ private final EmployeeService employeeService;
     }
 
     @GetMapping("/add")
-    public Employee add(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+    public Employee add(@RequestParam String firstName,
+                        @RequestParam String lastName,
+                        @RequestParam Double salary,
+                        @RequestParam Integer department) {
+        return employeeService.addEmployee(firstName, lastName,salary ,department);
     }
 
     @GetMapping("/remove")
-    public Employee remove(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+    public Employee remove(@RequestParam String firstName,
+                           @RequestParam String lastName,
+                           @RequestParam Double salary,
+                           @RequestParam Integer department) {
+        return employeeService.removeEmployee(firstName, lastName, salary, department);
     }
 
     @GetMapping("/find")
-    public Employee find(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
+    public Employee find(@RequestParam String firstName,
+                         @RequestParam String lastName,
+                         @RequestParam Double salary,
+                         @RequestParam Integer department) {
+        return employeeService.findEmployee(firstName, lastName, salary, department);
     }
 
     @GetMapping

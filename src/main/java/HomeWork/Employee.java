@@ -9,9 +9,25 @@ public class Employee {
 
     private final String surname;
 
-    public Employee(String name, String surname) {
+    private final double salary;
+
+    private final int department;
+
+
+    public Employee(String name, String surname, double salary, int department) {
         this.name = name;
         this.surname = surname;
+
+        this.salary = salary;
+        this.department = department;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public int getDepartment() {
+        return department;
     }
 
     public String getName() {
