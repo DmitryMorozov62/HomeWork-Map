@@ -5,7 +5,6 @@ import HomeWork.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -18,7 +17,7 @@ private final EmployeeService employeeService;
     @GetMapping("/add")
     public Employee add(@RequestParam String firstName,
                         @RequestParam String lastName,
-                        @RequestParam Double salary,
+                        @RequestParam Integer salary,
                         @RequestParam Integer department) {
         return employeeService.addEmployee(firstName, lastName,salary ,department);
     }
@@ -26,7 +25,7 @@ private final EmployeeService employeeService;
     @GetMapping("/remove")
     public Employee remove(@RequestParam String firstName,
                            @RequestParam String lastName,
-                           @RequestParam Double salary,
+                           @RequestParam Integer salary,
                            @RequestParam Integer department) {
         return employeeService.removeEmployee(firstName, lastName, salary, department);
     }
@@ -34,7 +33,7 @@ private final EmployeeService employeeService;
     @GetMapping("/find")
     public Employee find(@RequestParam String firstName,
                          @RequestParam String lastName,
-                         @RequestParam Double salary,
+                         @RequestParam Integer salary,
                          @RequestParam Integer department) {
         return employeeService.findEmployee(firstName, lastName, salary, department);
     }

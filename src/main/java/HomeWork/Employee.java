@@ -1,6 +1,8 @@
 package HomeWork;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Objects;
 
 public class Employee {
@@ -9,20 +11,23 @@ public class Employee {
 
     private final String surname;
 
-    private final double salary;
+    private final int salary;
 
     private final int department;
 
 
-    public Employee(String name, String surname, double salary, int department) {
-        this.name = name;
-        this.surname = surname;
+    public Employee(String name, String surname, int salary, int department) {
+        //this.name = name;
+        //this.surname = surname;
+        this.name = StringUtils.capitalize(name);
+        this.surname = StringUtils.capitalize(surname);
+
 
         this.salary = salary;
         this.department = department;
     }
 
-    public double getSalary() {
+    public int getSalary() {
         return salary;
     }
 
@@ -38,11 +43,13 @@ public class Employee {
         return surname;
     }
 
-    public String getNameKey() {
+    public String getFullName() {
+        //return name + " " + surname;
         return name + " " + surname;
     }
 
     @Override
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;

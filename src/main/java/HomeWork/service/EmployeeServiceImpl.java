@@ -2,12 +2,13 @@ package HomeWork.service;
 
 import HomeWork.Employee;
 import HomeWork.exception.EmployeeAlreadyAddedException;
+import HomeWork.exception.EmployeeBadRequestException;
 import HomeWork.exception.EmployeeNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -19,6 +20,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeServiceImpl() {
         this.employees = new HashMap<>(SIZE);
     }
+    public Map<String, Employee> getEmployees() {
+        return Collections.unmodifiableMap(employees);
+    }
 
     @PostConstruct
     public void init() {
@@ -29,62 +33,55 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
     @Override
-    public Employee addEmployee(String firstName, String lastName, double salary, int department) {
+    public Employee addEmployee(String firstName, String lastName, int salary, int department) {
         Employee employee = new Employee(firstName, lastName, salary, department);
-        if (employees.containsKey(employee.getNameKey())) {
+        if (employees.containsKey(employee.getFullName())) {
             throw new EmployeeAlreadyAddedException();
         }
-        employees.put(employee.getNameKey(),employee);
+        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
+            throw new EmployeeBadRequestException();
+        }
+
+        employees.put(employee.getFullName(),employee);
             return employee;
 
 
     }
     @Override
-    public Employee findEmployee(String firstName, String lastName, double salary, int department) {
+    public Employee findEmployee(String firstName, String lastName, int salary, int department) {
         Employee employee = new Employee(firstName, lastName, salary, department);
-        if (employees.containsKey(employee.getNameKey())) {
-            return employees.get(employee.getNameKey());
+        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
+            throw new EmployeeBadRequestException();
+        }
+        if (employees.containsKey(employee.getFullName())) {
+            return employees.get(employee.getFullName());
+
         }
         throw new EmployeeNotFoundException();
     }
     @Override
-    public Employee removeEmployee(String firstName, String lastName, double salary, int department) {
+    public Employee removeEmployee(String firstName, String lastName, int salary, int department) {
         Employee employee = new Employee(firstName, lastName, salary, department);
-        if (employees.containsKey(employee.getNameKey())) {
-            return employees.remove(employee.getNameKey());
+        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
+            throw new EmployeeBadRequestException();
         }
+        if (employees.containsKey(employee.getFullName())) {
+            return employees.remove(employee.getFullName());
+        }
+
         throw new EmployeeNotFoundException();
     }
     @Override
     public Collection<Employee> list() {
         return Collections.unmodifiableCollection(employees.values());
     }
-    @Override
-    public Employee getMaxSalaryByDepartment(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment()==department)
-                .max(Comparator.comparingDouble(Employee::getSalary))
-                .orElseThrow();
+    public static int testEmployee(String firstName, String lastName, int salary, int department) {
+        Employee employee = new Employee(firstName, lastName, salary, department);
+        if (StringUtils.isBlank(employee.getName()) || StringUtils.isBlank(employee.getSurname()) ||
+                !StringUtils.isAlpha(employee.getName()) || !StringUtils.isAlpha(employee.getSurname())) {
+            return 1;
+        }
+        return 2;
     }
 
-    @Override
-    public Employee getMinSalaryByDepartment(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment()==department)
-                .min(Comparator.comparingDouble(Employee::getSalary))
-                .orElseThrow();
-    }
-    @Override
-    public Collection<Employee> getListEmployeeByDepartment(int department) {
-        return employees.values().stream()
-                .filter(e -> e.getDepartment()==department)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Collection<Employee> getListEmployee() {
-        return employees.values().stream()
-                .sorted(Comparator.comparingInt(Employee::getDepartment))
-                .collect(Collectors.toList());
-    }
 }

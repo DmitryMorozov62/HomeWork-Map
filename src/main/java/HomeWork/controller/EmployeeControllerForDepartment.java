@@ -1,7 +1,7 @@
 package HomeWork.controller;
 
 import HomeWork.Employee;
-import HomeWork.service.EmployeeService;
+import HomeWork.service.EmployeeServiceForDepartment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,9 +13,9 @@ import java.util.Collection;
 @RequestMapping("/departments")
 public class EmployeeControllerForDepartment {
 
-    private final EmployeeService service;
+    private final EmployeeServiceForDepartment service;
 
-    public EmployeeControllerForDepartment(EmployeeService service) {
+    public EmployeeControllerForDepartment(EmployeeServiceForDepartment service) {
         this.service = service;
     }
 
