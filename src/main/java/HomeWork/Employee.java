@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 public class Employee {
 
     private final String name;
@@ -17,10 +19,8 @@ public class Employee {
 
 
     public Employee(String name, String surname, int salary, int department) {
-        //this.name = name;
-        //this.surname = surname;
-        this.name = StringUtils.capitalize(name);
-        this.surname = StringUtils.capitalize(surname);
+        this.name = capitalize(lowerCase(name));
+        this.surname = capitalize(lowerCase(surname));
 
 
         this.salary = salary;

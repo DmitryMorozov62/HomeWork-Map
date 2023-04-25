@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -38,9 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employees.containsKey(employee.getFullName())) {
             throw new EmployeeAlreadyAddedException();
         }
-        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
-            throw new EmployeeBadRequestException();
-        }
+        testEmployee(firstName,lastName);
 
         employees.put(employee.getFullName(),employee);
             return employee;
@@ -50,9 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findEmployee(String firstName, String lastName, int salary, int department) {
         Employee employee = new Employee(firstName, lastName, salary, department);
-        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
-            throw new EmployeeBadRequestException();
-        }
+        testEmployee(firstName,lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.get(employee.getFullName());
 
@@ -62,9 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee removeEmployee(String firstName, String lastName, int salary, int department) {
         Employee employee = new Employee(firstName, lastName, salary, department);
-        if (EmployeeServiceImpl.testEmployee(firstName, lastName, salary, department) == 1) {
-            throw new EmployeeBadRequestException();
-        }
+        testEmployee(firstName,lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.remove(employee.getFullName());
         }
@@ -75,13 +71,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Collection<Employee> list() {
         return Collections.unmodifiableCollection(employees.values());
     }
-    public static int testEmployee(String firstName, String lastName, int salary, int department) {
-        Employee employee = new Employee(firstName, lastName, salary, department);
-        if (StringUtils.isBlank(employee.getName()) || StringUtils.isBlank(employee.getSurname()) ||
-                !StringUtils.isAlpha(employee.getName()) || !StringUtils.isAlpha(employee.getSurname())) {
-            return 1;
+    public void testEmployee(String firstName, String lastName) {
+        if (!isAlpha(firstName) || !isAlpha(lastName)) {
+            throw new EmployeeBadRequestException();
         }
-        return 2;
     }
-
 }
